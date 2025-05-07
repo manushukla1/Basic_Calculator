@@ -1,24 +1,43 @@
 import math
-
+history = [] # store each calculation in a list and display it on demand.
+memory = None      # we can set it as zero but here i have taken it as None and for handling None i have added checks while assigning value
 def calculator():
     while True:
         try:
-            print("\nSimple Calculator")
-            number1 = float(input("Enter first number: "))
-            assert number1 >= 0, "Only positive numbers allowed."
+            print("\nSimple Calculator with Memory")
+            inp1 = input("Enter first number (or 'm'): ")
+            if inp1.lower()== 'm' and memory is not None:
+                    number1 = memory  # Use memory if available
+            elif inp1.lower()== 'm' and memory is  None:
+                print("❌ No memory available.")
+                continue
+            else:
+               number1 = float(inp1)
+               assert number1 >= 0, "Only positive numbers allowed!"
 
-            operation = input("Enter the operation (+, -, *, /, ** for power, sqrt for square root, or 'q' to quit): ")
-
+            # operation block
+            operation = input("Enter the operation (+, -, *, /, ** for power, sqrt for square root, or 'q' to quit or 'h' for history): ")
             if operation == 'q':
                 print("Goodbye!")
                 break
-
+            elif operation == 'h':
+                print("\n Records")
+                for record in history:
+                    print(record)
+                continue
             # Square root is a single-input operation
-            if operation == 'sqrt':
+            elif operation == 'sqrt':
                 result = math.sqrt(number1)
             else:
-                number2 = float(input("Enter second number: "))
-                assert number2 >= 0, "Only positive numbers allowed."
+                inp2 = input("Enter Second number (or 'm'): ")
+                if inp2.lower() == 'm' and memory is not None:
+                    number2 = memory  # Use memory if available
+                elif inp2.lower() == 'm' and memory is None:
+                    print("❌ No memory available.")
+                    continue
+                else:
+                    number2 = float(inp2)
+                    assert number2 >= 0, "Only positive numbers allowed!"
 
                 if operation == '+':
                     result = number1 + number2
@@ -35,8 +54,9 @@ def calculator():
                     print("Invalid operation.")
                     continue
 
-            print("Result:", result)
-
+                history.append (f"{number1} {operation} {number2} = {result}")
+                print("Result:", result)
+                memory = result
         except ValueError:
             print("❌ Please enter valid numbers.")
         except AssertionError as ae:
